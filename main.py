@@ -62,14 +62,27 @@ def batch_process_anims(
         for anim in Path(anims_dir).iterdir()
         if anim.suffix.lower() == ".asc"
     ]
-    with ProcessPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(spawn_instance, args) for args in anims_query]
-        start = time()
-        for future in as_completed(futures):
-            if exception := future.exception():
-                print(exception)
-        end = time()
-        print(f"\n\nTotal time: {end - start:.2f}")
+
+    executor = ProcessPoolExecutor(max_workers=max_workers)
+    start = time()
+    try:
+        results = executor.map(spawn_instance, anims_query, chunksize=1, timeout=20)
+        executor.shutdown(wait=True)
+    except (OSError, KeyboardInterrupt, AttributeError):
+        executor.shutdown(wait=False, cancel_futures=True)
+        raise
+    end = time()
+    print(f"\n\nTotal time: {end - start:.2f}")
+    return list(results)
+
+    # with ProcessPoolExecutor(max_workers=max_workers) as executor:
+    #     futures = [executor.submit(spawn_instance, args) for args in anims_query]
+    #     start = time()
+    #     for future in as_completed(futures):
+    #         if exception := future.exception():
+    #             print(exception)
+    #     end = time()
+    #     print(f"\n\nTotal time: {end - start:.2f}")
 
 
 def main():
