@@ -3,8 +3,7 @@ from pathlib import Path
 from sys import argv
 
 import bpy
-from krximpexp.BatAscImp import (DEFAULT_SAMPLE_MESH_DIR, ASCParser, AscType,
-                                 BatAscImp)
+from krximpexp.BatAscImp import DEFAULT_SAMPLE_MESH_DIR, ASCParser, AscType, BatAscImp
 from krximpexp.KrxAscExp import KrxAscExp
 from krximpexp.scene import SceneMode
 

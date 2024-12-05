@@ -66,7 +66,8 @@ def batch_process_anims(
         futures = [executor.submit(spawn_instance, args) for args in anims_query]
         start = time()
         for future in as_completed(futures):
-            print(future.result())
+            if exception := future.exception():
+                print(exception)
         end = time()
         print(f"\n\nTotal time: {end - start:.2f}")
 
