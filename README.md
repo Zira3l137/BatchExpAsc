@@ -45,6 +45,17 @@ python main.py -c config.ini -m 0
 - `-c, --config` : Path to the config file
 - `-m, --max_processes` : Maximum number of processes to use (calculated automatically based on CPU count if not set)
 
+### Configuration
+
+Instead of using a skeleton `.ASC` file, it is possible and **recommended** to use a skeleton from a pre-created Blender scene (`.blend` file)
+containing one. It is useful in cases when the goal is to add a procedurally generated secondary movements to a certain bones in the skeleton (physics).
+In Blender it is done by bone constraints, KrxImpExp bakes the constraints into keyframes automatically thus by providing a Blender scene with 
+the skeleton that has constraints applied to it you can batch bake those constraints into keyframes and export them for each animation.
+
+**Important: you must either provide a skeleton or a `.blend` scene, not both.**
+
+For more details see [config.ini](/config.ini)
+
 # Aknowledgements
 
 - [Patrix](https://github.com/Patrix9999) - For the idea and readme file for this script
