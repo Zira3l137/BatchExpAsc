@@ -1,13 +1,37 @@
+import importlib
+import sys
 from enum import IntEnum
 from pathlib import Path
 from sys import argv
 
 import bpy
-from krximpexp.BatAscImp import (DEFAULT_SAMPLE_MESH_DIR, ASCParser, AscType,
-                                 BatAscImp)
-from krximpexp.KrxAscExp import KrxAscExp
-from krximpexp.scene import SceneMode
 
+addon_module_prefix = "krximpexp"
+addon_module = None
+module_name = None
+
+for name in sys.modules:
+    if addon_module_prefix in name.lower():
+        addon_module = sys.modules[name]
+        break
+
+if addon_module is None:
+    raise ImportError(
+        f"Could not find any loaded module starting with '{addon_module_prefix}'"
+    )
+
+module_name = addon_module.__name__.split(".")[0]
+
+BatAscImp = getattr(importlib.import_module(f"{module_name}.BatAscImp"), "BatAscImp")
+ASCParser = getattr(importlib.import_module(f"{module_name}.BatAscImp"), "ASCParser")
+AscType = getattr(importlib.import_module(f"{module_name}.BatAscImp"), "AscType")
+KrxAscExp = getattr(importlib.import_module(f"{module_name}.KrxAscExp"), "KrxAscExp")
+SceneMode = getattr(importlib.import_module(f"{module_name}.scene"), "SceneMode")
+
+DEFAULT_SAMPLE_MESH_DIR = getattr(
+    importlib.import_module(f"{module_name}.BatAscImp"),
+    "DEFAULT_SAMPLE_MESH_DIR",
+)
 DEFAULT_EXPORT_DIR = Path().home().resolve() / "BatchAscExp"
 EXPORT_FORMAT = {0: "fbx", 1: "asc"}
 
