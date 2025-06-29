@@ -84,15 +84,20 @@ def batch_process_anims(
     ]
 
     executor = ProcessPoolExecutor(max_workers=max_workers)
+
     start = time()
+
     try:
         results = executor.map(spawn_instance, anims_query, chunksize=1, timeout=20)
         executor.shutdown(wait=True)
     except (OSError, KeyboardInterrupt, AttributeError):
         executor.shutdown(wait=False, cancel_futures=True)
         raise
+
     end = time()
+
     print(f"\n\nTotal time: {end - start:.2f}")
+    print(f"Number of concurrent processes: {max_workers}")
     return list(results)
 
     # with ProcessPoolExecutor(max_workers=max_workers) as executor:
@@ -110,6 +115,7 @@ def main():
     config = ConfigParser()
     config.read(arguments.config_path)
     max_processes = arguments.max_processes
+
     if max_processes == 0:
         max_processes = max(1, (cpu_count() or 1) * 2)
 

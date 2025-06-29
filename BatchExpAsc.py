@@ -97,9 +97,6 @@ class BatchExpAsc:
         obj = context.active_object
         if not obj:
             raise RuntimeError("No object selected")
-        if not self.start and not self.end:
-            return
-
         obj_anim_data = obj.animation_data
         obj_action = obj_anim_data.action
         if obj_anim_data and obj_action:
