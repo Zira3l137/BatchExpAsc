@@ -1,6 +1,6 @@
 # Introduction
 
-**BatchExpAsc** is a utility script for [Blender](https://www.blender.org/) that utilizes [KrxImpExp](https://gitlab.com/Patrix9999/krximpexp).
+**BatchExpAsc** is a utility script. It utilizes [Blender](https://www.blender.org/) and [KrxImpExp](https://gitlab.com/Patrix9999/krximpexp) to batch port ASC animations from Gothic from one skeleton to another similar one.
 
 Its primary purpose is to export provided animations applied to a certain skeleton.
 Provided skeleton should at least contain all the bones that are present in the skeleton used in animations.
