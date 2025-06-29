@@ -42,21 +42,28 @@ def spawn_instance(args: tuple) -> int:
         export_dir,
         export_type,
     ) = args
-    import_body = "True" if body_path else ""
-    return run(
-        [
-            blender_path,
-            "--background",
-            scene_path,
-            "--python",
-            script_path,
-            body_path,
-            anim_path,
-            export_dir,
-            export_type,
-            import_body,
-        ],
-    ).returncode
+
+    blender_command = [
+        blender_path,
+        "--background",
+    ]
+
+    if scene_path:
+        blender_command.append(scene_path)
+
+    blender_command += [
+        "--python",
+        script_path,
+        "--",
+        anim_path,
+        export_dir,
+        export_type,
+    ]
+
+    blender_command.append(body_path or "")
+
+    print("Running:", blender_command)  # Optional debug
+    return run(blender_command).returncode
 
 
 def batch_process_anims(

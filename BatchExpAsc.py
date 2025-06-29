@@ -3,7 +3,8 @@ from pathlib import Path
 from sys import argv
 
 import bpy
-from krximpexp.BatAscImp import DEFAULT_SAMPLE_MESH_DIR, ASCParser, AscType, BatAscImp
+from krximpexp.BatAscImp import (DEFAULT_SAMPLE_MESH_DIR, ASCParser, AscType,
+                                 BatAscImp)
 from krximpexp.KrxAscExp import KrxAscExp
 from krximpexp.scene import SceneMode
 
@@ -170,12 +171,20 @@ class BatchExpAsc:
 
 
 def parse_commandline_arguments() -> dict[str, str]:
+    try:
+        separator_index = argv.index("--")
+        user_args = argv[separator_index + 1 :]
+    except ValueError:
+        raise RuntimeError("Expected '--' to separate Blender and script arguments.")
+
+    if len(user_args) < 4:
+        raise ValueError("Not enough arguments passed to script.")
+
     return {
-        "body_path": argv[5],
-        "anim_path": argv[6],
-        "export_dir": argv[7],
-        "export_type": argv[8],
-        "import_body": argv[9],
+        "anim_path": user_args[0],
+        "export_dir": user_args[1],
+        "export_type": user_args[2],
+        "body_path": user_args[3] if len(user_args) > 3 else None,
     }
 
 
@@ -186,5 +195,5 @@ if __name__ == "__main__":
         anim_path=arguments["anim_path"],
         export_dir=arguments["export_dir"],
         export_type=int(arguments["export_type"]),
-        import_body=bool(arguments["import_body"]),
+        import_body=bool(arguments["body_path"]),
     )
